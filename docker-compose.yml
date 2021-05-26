@@ -8,6 +8,12 @@ services:
     ports:
       - 3000:3000
 
+  frontend-tests:
+    depends_on: 
+      - backend
+    image: manageme-my-move_frontend
+    command: npm test
+
   backend: 
     depends_on: 
       - db
@@ -19,6 +25,16 @@ services:
     volumes:
       - ./backend:/app
     command: ./docker-entrypoint.sh
+
+  backend-tests: 
+    depends_on: 
+      - db
+    image: manageme-my-move_backend
+    environment: 
+      DB_URL: mongodb://db/vidly
+    volumes:
+      - ./backend:/app
+    command: npm test
 
   db:
     image: mongo:4.0-xenial
